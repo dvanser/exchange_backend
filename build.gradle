@@ -1,0 +1,64 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.2.70'
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'kotlin-jpa'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.exchange'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://repo.spring.io/snapshot" }
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    runtimeOnly('com.h2database:h2')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE') {
+        exclude(module: 'jackson-mapper-asl') //MEMO: michael: we already have a more recent jackson via Spring Boot
+    }
+    compile 'org.springframework.security:spring-security-oauth2-client:5.1.2.BUILD-SNAPSHOT'
+    compile 'io.jsonwebtoken:jjwt:0.9.1'
+    compile 'org.springframework.boot:spring-boot-configuration-processor:2.1.0.RELEASE'
+    compile 'com.twilio.sdk:twilio:7.31.0'
+    compile 'org.springframework.boot:spring-boot-starter-mail:2.1.1.RELEASE'
+    compile 'khttp:khttp:0.1.0'
+    compile 'org.json:json:20180813'
+}

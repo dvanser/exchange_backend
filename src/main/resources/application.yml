@@ -1,0 +1,84 @@
+server:
+  useForwardHeaders: true
+spring:
+  datasource:
+    url: jdbc:h2:~/exchangeDB;AUTO_SERVER=TRUE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    showSql: true
+    hibernate:
+      ddlAuto: update
+      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  mail:
+    defaultEncoding: UTF-8
+    host: HOST
+    username: USERNAME
+    password: PASSWORD
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    testConnection: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: GOOGLE_CLIENT_ID
+            clientSecret: GOOGLE_CLIENT_SECRET
+            redirectUriTemplate: "https://api.dev.exchange.com/oauth2/callback/{registrationId}"
+            scope:
+            - email
+            - profile
+          facebook:
+            clientId: FACEBOOK_CLIENT_ID
+            clientSecret: FACEBOOK_CLIENT_SECRET
+            redirectUriTemplate: "https://api.dev.exchange.com/oauth2/callback/{registrationId}"
+            scope:
+            - email
+            - public_profile
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.2/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.2/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.2/me?fields=id,first_name,middle_name,last_name,name,email
+            userInfoAuthenticationMethod: form
+app:
+  auth:
+    tokenSecret: 4JVU7TCL7S210BVOELFX77JT8CATTJMH
+    tokenExpirationMilliSeconds: 604800000 #7 days
+  oauth2:
+    allowedRedirectUrls: #urls where user can be redirected after successful login using OAuth2, passed as param to oauth login init
+    - https://dev.exchange.com/login/oauth2
+  sms2FA:
+    twilioAccountSid: twilioAccountSid
+    twilioAuthToken: twilioAuthToken
+    twilioPhoneNumber: twilioPhoneNumber
+  twoFA:
+    googleCodeLifeTime: 30
+    smsCodeLifeTime: 120
+    twoFAMaxAttempts: 5
+    twoFAAttemptDelay: 300
+  mail:
+    supportEmail: support@exchange.com
+  encrypt:
+    privateKey: 9BB91B8068990A7A4F0F25438HO238J6
+    initVector: encryptionIntVec
+  linkValidInterval: 600000 #milliseconds
+  appUrl: https://api.dev.exchange.com
+  veriffMe:
+    client: VERIFF_ME_CLIENT
+    secret: VERIFF_ME_SECRET
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
